@@ -1,5 +1,5 @@
 export const CONFIG = {
-  WEBSOCKET_URL: 'ws://city-ws.herokuapp.com/',
+  WEBSOCKET_URL: 'wss://city-ws.herokuapp.com/',
   COLOR_RANGE_MAPPING: {
     5: 'rgb(0,176,80)',
     10: 'rgb(146, 208, 80)',
