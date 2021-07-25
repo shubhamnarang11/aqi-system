@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { CONFIG } from '../../utils/config';
-import './aqi-monitor.scss';
+import './AQIMonitor.scss';
 
 export default class AQIMonitor extends Component {
   timerId;
@@ -51,7 +51,7 @@ export default class AQIMonitor extends Component {
     this.timerId = undefined;
     this.setState({ aqiData: prevAQIData });
   };
-  
+
   initWebSocket = () => {
     const ws = new WebSocket(CONFIG.WEBSOCKET_URL);
 
@@ -117,67 +117,75 @@ export default class AQIMonitor extends Component {
 
     return (
       <div className="aqi-monitor-cont">
-        <div className="chart-div">
-          <h3>Historical Data</h3>
-          {Object.keys(aqiData).map((city) => (
-            <div>
-              {city}
-              <svg width="500" height="25">
-                <g className="container">
-                  {aqiData[city].history.map((row, i) => (
-                    <rect
-                      x={i * 11}
-                      y={25 - this.getYValueForRange(row.y)}
-                      strokeWidth={1}
-                      width={10}
-                      height={this.getYValueForRange(row.y)}
-                      fill={
-                        CONFIG.COLOR_RANGE_MAPPING[
-                          this.getYValueForRange(row.y)
-                        ]
-                      }
-                    ></rect>
-                  ))}
-                </g>
-              </svg>
+        {Object.keys(aqiData).length > 0 ? (
+          <>
+            <div className="chart-div">
+              <h3>Historical Data</h3>
+              {Object.keys(aqiData).map((city) => (
+                <div>
+                  {city}
+                  <svg width="500" height="25">
+                    <g className="container">
+                      {aqiData[city].history.map((row, i) => (
+                        <rect
+                          x={i * 11}
+                          y={25 - this.getYValueForRange(row.y)}
+                          strokeWidth={1}
+                          width={10}
+                          height={this.getYValueForRange(row.y)}
+                          fill={
+                            CONFIG.COLOR_RANGE_MAPPING[
+                              this.getYValueForRange(row.y)
+                            ]
+                          }
+                        ></rect>
+                      ))}
+                    </g>
+                  </svg>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <table className="aqi-table">
-          <thead>
-            <tr>
-              <th>City</th>
-              <th>Current AQI</th>
-              <th>Last Updated On</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(aqiData).map((city) => (
-              <tr key={city}>
-                <td>{city.toUpperCase()}</td>
-                <td
-                  style={{
-                    color:
-                      CONFIG.COLOR_RANGE_MAPPING[
-                        this.getYValueForRange(aqiData[city].current)
-                      ],
-                  }}
-                >
-                  {aqiData[city].current.toFixed(2)}
-                  {this.getPointerDirection(city) ? (
-                    <i
-                      class={`fas fa-arrow-${
-                        this.getPointerDirection(city).dir
-                      }`}
-                      style={{ color: this.getPointerDirection(city).color }}
-                    ></i>
-                  ) : null}
-                </td>
-                <td>{this.getUpdatedAQITime(aqiData[city].lastUpdated)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            <table className="aqi-table">
+              <thead>
+                <tr>
+                  <th>City</th>
+                  <th>Current AQI</th>
+                  <th>Last Updated On</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(aqiData).map((city) => (
+                  <tr key={city}>
+                    <td>{city.toUpperCase()}</td>
+                    <td
+                      style={{
+                        color:
+                          CONFIG.COLOR_RANGE_MAPPING[
+                            this.getYValueForRange(aqiData[city].current)
+                          ],
+                      }}
+                    >
+                      {aqiData[city].current.toFixed(2)}
+                      {this.getPointerDirection(city) ? (
+                        <i
+                          class={`fas fa-arrow-${
+                            this.getPointerDirection(city).dir
+                          }`}
+                          style={{
+                            color: this.getPointerDirection(city).color,
+                          }}
+                        ></i>
+                      ) : null}
+                    </td>
+                    <td>{this.getUpdatedAQITime(aqiData[city].lastUpdated)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        ) : (
+          <div className="loader"> </div>
+        )}
       </div>
     );
   }
