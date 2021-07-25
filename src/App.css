@@ -1,0 +1,14 @@
+.App {
+  text-align: center;
+  font-family: 'Nunito Sans', sans-serif;
+  /* height: 100vh; */
+  height: 100%;
+  /* margin-top: -20px; */
+  padding: 10px;
+}
+
+h2 {
+  text-align: left;
+  margin-left: 20px;
+
+}
